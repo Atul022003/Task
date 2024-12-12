@@ -49,5 +49,13 @@ notifyListeners();
     return false;
   }
 
+
 }
+  Future<void> logout() async {
+    await sharedPref.init();
+    await sharedPref.setToken(null); // Clear the token
+
+    // Notify listeners to reflect the logout state
+    notifyListeners();
+  }
 }

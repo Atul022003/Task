@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task/add_product.dart';
+import 'package:task/login_page.dart';
+import 'package:task/provider/auth_provider.dart';
 import 'package:task/provider/product_provider.dart';
 
 class HomePage extends StatefulWidget{
@@ -24,7 +26,9 @@ class HomePageState extends State<HomePage>{
   @override
   Widget build(BuildContext context) {
 
+
     final provider = Provider.of<ProductProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
   return Scaffold(floatingActionButton:FloatingActionButton(
     onPressed: () {
       Navigator.push(context,MaterialPageRoute(builder: (context) => AddProduct()));
@@ -34,7 +38,11 @@ class HomePageState extends State<HomePage>{
   ) ,
     appBar: AppBar(
       actions: [
-        IconButton(onPressed: (){}, icon: Icon(Icons.logout))
+        IconButton(onPressed: (){
+          authProvider.logout();
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginPage()));
+
+        }, icon: Icon(Icons.logout))
 
       ],
       automaticallyImplyLeading: false,
@@ -62,7 +70,7 @@ class HomePageState extends State<HomePage>{
         Column(children: provider.allProducts.map((product) =>
         ListTile(
           leading: (product.imagePath.isNotEmpty) ? Image.file(File(product.imagePath),
-            fit: BoxFit.cover,width: 50,height: 50,) : SizedBox(),
+            fit: BoxFit.cover,width: 70,height: 70,) : SizedBox(),
           title: Text(product.name ?? "~"),
           subtitle: Text("${product.price}"),trailing: InkWell(child: Icon(Icons.delete),
         onTap: (){
