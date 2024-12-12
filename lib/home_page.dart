@@ -52,6 +52,9 @@ class HomePageState extends State<HomePage>{
       children: [
         Padding(padding: EdgeInsets.all(20),
         child:  TextField(
+          onChanged: (query){
+            provider.searchProducts(query);
+          },
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
               hintText: "Search",
@@ -67,7 +70,7 @@ class HomePageState extends State<HomePage>{
           height: 10,
         ),
 
-        Column(children: provider.allProducts.map((product) =>
+        (provider.allProducts.isNotEmpty) ? Column(children: provider.allProducts.map((product) =>
         ListTile(
           leading: (product.imagePath.isNotEmpty) ? Image.file(File(product.imagePath),
             fit: BoxFit.cover,width: 70,height: 70,) : SizedBox(),
@@ -75,7 +78,12 @@ class HomePageState extends State<HomePage>{
           subtitle: Text("${product.price}"),trailing: InkWell(child: Icon(Icons.delete),
         onTap: (){
             provider.deleteProduct(product);
-        },),)).toList(),)
+        },),)).toList(),) : Column(children: [
+
+          Icon(Icons.list),
+          Text("No Products Found")
+
+        ],)
 
 
 

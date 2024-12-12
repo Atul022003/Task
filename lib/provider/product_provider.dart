@@ -36,4 +36,22 @@ class ProductProvider with ChangeNotifier {
     await sharedPref.deleteProduct(product);
     refreshProducts();
   }
+
+  void searchProducts(String query) async {
+    _allProducts.clear();
+
+    if(query.isEmpty){
+      refreshProducts();
+      return;
+    }
+
+    final searchedProducts =  await sharedPref.searchProducts(query);
+    if(searchedProducts.isEmpty){
+      notifyListeners();
+      return;
+    }
+
+    _allProducts = searchedProducts;
+    notifyListeners();
+  }
 }
